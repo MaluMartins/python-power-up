@@ -14,9 +14,12 @@ import pyautogui
 import time
 import pandas as pd
 
-pyautogui.PAUSE = 2
+def descobrir_posicao():
+    time.sleep(5)
+    return pyautogui.position()
 
 def acessar_site():
+    pyautogui.PAUSE = 2
     # apertar a tecla windows
     pyautogui.press("win")
 
@@ -33,8 +36,10 @@ def acessar_site():
     pyautogui.press("enter")
 
 def login():
+    pyautogui.PAUSE = 0.5
     # clicar no campo email
-    pyautogui.click(x=544, y=359)
+    posicao = descobrir_posicao()
+    pyautogui.click(posicao)
 
     # digitar email
     pyautogui.write("malu@malu.com")
@@ -54,12 +59,17 @@ tabela_produtos = pd.read_csv("produtos.csv")
 # print(list(tabela_produtos.columns))
 
 def preencher_form():
+    pyautogui.PAUSE = 0.5
+    posicao = descobrir_posicao()
+
     for linha in tabela_produtos.index:
-        pyautogui.click(x=693, y=240)
+        pyautogui.click(posicao)
         for coluna in tabela_produtos.columns:
             
-            if not pd.isna(coluna):
-                pyautogui.write(str(tabela_produtos.loc[linha, coluna]))
+            valor = tabela_produtos.loc[linha, coluna]
+
+            if not pd.isna(valor):
+                pyautogui.write(str(valor))
 
             pyautogui.press("tab")  
             pyautogui.press("enter")
