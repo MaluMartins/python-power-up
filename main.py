@@ -13,93 +13,61 @@
 import pyautogui
 import time
 import pandas as pd
-import numpy
-import openpyxl
-
-# clicar -> pyautogui.click
-# escrever -> pyautogui.write
-# apertar uma tecla -> pyautogui.press
-# atalho -> pyautogui.hotkey
-# scroll -> pyautogui.scroll
 
 pyautogui.PAUSE = 2
 
-# apertar a tecla windows
-pyautogui.press("win")
+def acessar_site():
+    # apertar a tecla windows
+    pyautogui.press("win")
 
-# digitar o nome do programa (chrome)
-pyautogui.write("edge")
+    # digitar o nome do programa (chrome)
+    pyautogui.write("edge")
 
-# apertar enter
-pyautogui.press("enter")
+    # apertar enter
+    pyautogui.press("enter")
 
-# digitar o link
-link = "https://dlp.hashtagtreinamentos.com/python/intensivao/login"
-pyautogui.write(link)
+    # digitar o link
+    link = "https://dlp.hashtagtreinamentos.com/python/intensivao/login"
+    pyautogui.write(link)
 
-pyautogui.press("enter")
+    pyautogui.press("enter")
 
-#esperar 5 segundos após o enter
-time.sleep(5)
+def login():
+    # clicar no campo email
+    pyautogui.click(x=544, y=359)
 
-# clicar no campo email
-pyautogui.click(x=544, y=359)
+    # digitar email
+    pyautogui.write("malu@malu.com")
 
-# digitar email
-pyautogui.write("malu@malu.com")
-
-# passar de campo
-pyautogui.press("tab")
-
-# digitar senha
-pyautogui.write("senha")
-
-pyautogui.press("tab")
-pyautogui.press("enter")
-
-# importar a base de dados
-tabela = pd.read_csv("produtos.csv")
-
-for linha in tabela.index:
-    pyautogui.click(x=693, y=240)
-
-    # codigo
-    codigo = tabela.loc[linha, "codigo"]
-    pyautogui.write(codigo)
+    # passar de campo
     pyautogui.press("tab")
 
-    # marca
-    marca = tabela.loc[linha, "marca"]
-    pyautogui.write(marca)
-    pyautogui.press("tab")
-
-    # tipo
-    tipo = tabela.loc[linha, "tipo"]
-    pyautogui.write(tipo)
-    pyautogui.press("tab")
-
-    # categoria
-    categoria = tabela.loc[linha, "categoria"]
-    pyautogui.write(str(categoria))
-    pyautogui.press("tab")
-
-    # preço
-    preco = tabela.loc[linha, "preco_unitario"]
-    pyautogui.write(str(preco))
-    pyautogui.press("tab")
-
-    # custo
-    custo = tabela.loc[linha, "custo"]
-    pyautogui.write(str(custo))
-    pyautogui.press("tab")
-
-    #obs
-    obs = tabela.loc[linha, "obs"]
-    
-    if not pd.isna(obs):
-        pyautogui.write(obs)
+    # digitar senha
+    pyautogui.write("senha")
 
     pyautogui.press("tab")
     pyautogui.press("enter")
 
-    pyautogui.scroll(5000)
+# importar a base de dados
+tabela_produtos = pd.read_csv("produtos.csv")
+
+# print(list(tabela_produtos.columns))
+
+def preencher_form():
+    for linha in tabela_produtos.index:
+        pyautogui.click(x=693, y=240)
+        for coluna in tabela_produtos.columns:
+            
+            if not pd.isna(coluna):
+                pyautogui.write(str(tabela_produtos.loc[linha, coluna]))
+
+            pyautogui.press("tab")  
+            pyautogui.press("enter")
+
+            pyautogui.scroll(5000)
+
+acessar_site()
+time.sleep(2)
+login()
+time.sleep(2)   
+preencher_form()
